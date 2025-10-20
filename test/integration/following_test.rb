@@ -11,6 +11,10 @@ end
 
 class FollowPagesTest < Following
 
+  # @t:id "TEST-users-following-view"
+  # @t:covers ["app/controllers/users_controller.rb#following","app/models/user.rb#follow","app/models/user.rb#following?"]
+  # @t:intent "Following page lists followed users and links"
+  # @t:kind "integration"
   test "following page" do
     get following_user_path(@user)
     assert_response :unprocessable_entity
@@ -21,6 +25,10 @@ class FollowPagesTest < Following
     end
   end
 
+  # @t:id "TEST-users-followers-view"
+  # @t:covers ["app/controllers/users_controller.rb#followers"]
+  # @t:intent "Followers page lists follower users and links"
+  # @t:kind "integration"
   test "followers page" do
     get followers_user_path(@user)
     assert_response :unprocessable_entity

@@ -36,6 +36,10 @@ end
 
 class PasswordFormTest < PasswordResetForm
 
+  # @t:id "TEST-password-reset-request-updates"
+  # @t:covers ["app/models/user.rb#create_reset_digest","app/models/user.rb#send_password_reset_email"]
+  # @t:intent "Successful reset request rotates digest and sends mail"
+  # @t:kind "integration"
   test "reset with valid email" do
     assert_not_equal @user.reset_digest, @reset_user.reset_digest
     assert_equal 1, ActionMailer::Base.deliveries.size
@@ -55,6 +59,10 @@ class PasswordFormTest < PasswordResetForm
     assert_redirected_to root_url
   end
 
+  # @t:id "TEST-password-reset-token-validation"
+  # @t:covers ["app/models/user.rb#authenticated?"]
+  # @t:intent "Reject reset when token does not match digest"
+  # @t:kind "integration"
   test "reset with right email but wrong token" do
     get edit_password_reset_path('wrong token', email: @reset_user.email)
     assert_redirected_to root_url

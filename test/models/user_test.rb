@@ -7,15 +7,27 @@ class UserTest < ActiveSupport::TestCase
                      password: "foobar", password_confirmation: "foobar")
   end
 
+  # @t:id "TEST-user-validations-basics"
+  # @t:covers ["app/models/user.rb#User"]
+  # @t:intent "Baseline fixture validates with default attributes"
+  # @t:kind "unit"
   test "should be valid" do
     assert @user.valid?
   end
 
+  # @t:id "TEST-user-name-presence"
+  # @t:covers ["app/models/user.rb#User"]
+  # @t:intent "Reject missing name"
+  # @t:kind "unit"
   test "name should be present" do
     @user.name = ""
     assert_not @user.valid?
   end
 
+  # @t:id "TEST-user-email-presence"
+  # @t:covers ["app/models/user.rb#User"]
+  # @t:intent "Reject missing email"
+  # @t:kind "unit"
   test "email should be present" do
     @user.email = "     "
     assert_not @user.valid?
@@ -65,8 +77,23 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.valid?
   end
 
+  # @t:id "TEST-user-authenticated-nil-digest"
+  # @t:covers ["app/models/user.rb#authenticated?"]
+  # @t:intent "Ensure nil digest returns false without raising"
+  # @t:kind "unit"
   test "authenticated? should return false for a user with nil digest" do
     assert_not @user.authenticated?(:remember, '')
+  end
+
+  # @t:id "TEST-user-email-downcase"
+  # @t:covers ["app/models/user.rb#downcase_email","app/models/user.rb#User"]
+  # @t:intent "Emails persist in lowercase regardless of input casing"
+  # @t:kind "unit"
+  test "email addresses should be saved as lower-case" do
+    mixed_case_email = "Foo@ExAMPle.CoM"
+    @user.email = mixed_case_email
+    @user.save!
+    assert_equal mixed_case_email.downcase, @user.reload.email
   end
 
   test "associated microposts should be destroyed" do
@@ -77,6 +104,10 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  # @t:id "TEST-user-follow-graph"
+  # @t:covers ["app/models/user.rb#follow","app/models/user.rb#unfollow","app/models/user.rb#following?"]
+  # @t:intent "Follow relationships add/remove correctly and disallow self-follow"
+  # @t:kind "unit"
   test "should follow and unfollow a user" do
     michael = users(:michael)
     archer  = users(:archer)
@@ -91,6 +122,10 @@ class UserTest < ActiveSupport::TestCase
     assert_not michael.following?(michael)
   end
 
+  # @t:id "TEST-user-feed-follows"
+  # @t:covers ["app/models/user.rb#feed"]
+  # @t:intent "Feed contains self and followed posts but not unfollowed"
+  # @t:kind "unit"
   test "feed should have the right posts" do
     michael = users(:michael)
     archer  = users(:archer)
@@ -111,5 +146,16 @@ class UserTest < ActiveSupport::TestCase
     archer.microposts.each do |post_unfollowed|
       assert_not michael.feed.include?(post_unfollowed)
     end
+  end
+
+  # @t:id "TEST-password-reset-expiry"
+  # @t:covers ["app/models/user.rb#password_reset_expired?"]
+  # @t:intent "Reset tokens expire after two hours"
+  # @t:kind "unit"
+  test "password reset expires after two hours" do
+    @user.reset_sent_at = 3.hours.ago
+    assert @user.password_reset_expired?
+    @user.reset_sent_at = 1.hour.ago
+    assert_not @user.password_reset_expired?
   end
 end

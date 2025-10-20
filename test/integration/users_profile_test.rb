@@ -7,6 +7,10 @@ class UsersProfileTest < ActionDispatch::IntegrationTest
     @user = users(:michael)
   end
 
+  # @t:id "TEST-users-profile-feed"
+  # @t:covers ["app/controllers/users_controller.rb#show","app/models/user.rb#feed","app/helpers/users_helper.rb#gravatar_for"]
+  # @t:intent "Profile page renders user info and timeline"
+  # @t:kind "integration"
   test "profile display" do
     get user_path(@user)
     assert_template 'users/show'

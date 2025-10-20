@@ -6,6 +6,10 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     @user = users(:michael)
   end
 
+  # @t:id "TEST-users-update-validations"
+  # @t:covers ["app/controllers/users_controller.rb#edit","app/controllers/users_controller.rb#update","app/models/user.rb#User"]
+  # @t:intent "Invalid attributes re-render edit form"
+  # @t:kind "integration"
   test "unsuccessful edit" do
     log_in_as(@user)
     get edit_user_path(@user)
@@ -18,6 +22,10 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert_template 'users/edit'
   end
 
+  # @t:id "TEST-users-edit-authorization"
+  # @t:covers ["app/controllers/users_controller.rb#edit","app/controllers/users_controller.rb#update"]
+  # @t:intent "Friendly forwarding allows owner to edit successfully"
+  # @t:kind "integration"
   test "successful edit with friendly forwarding" do
     get edit_user_path(@user)
     log_in_as(@user)

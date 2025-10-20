@@ -7,6 +7,10 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     @non_admin = users(:archer)
   end
 
+  # @t:id "TEST-users-index-admin-list"
+  # @t:covers ["app/controllers/users_controller.rb#index","app/controllers/users_controller.rb#destroy","app/models/user.rb#User"]
+  # @t:intent "Admins see paginated list with delete links and can remove users"
+  # @t:kind "integration"
   test "index as admin including pagination and delete links" do
     log_in_as(@admin)
     get users_path
@@ -26,6 +30,10 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # @t:id "TEST-users-index-non-admin-no-delete"
+  # @t:covers ["app/controllers/users_controller.rb#index"]
+  # @t:intent "Non-admins cannot see delete links"
+  # @t:kind "integration"
   test "index as non-admin" do
     log_in_as(@non_admin)
     get users_path

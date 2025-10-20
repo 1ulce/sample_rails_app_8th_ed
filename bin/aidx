@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative '../scripts/aidx_validate'
+
+AIDX::CLI.run(ARGV, root: File.expand_path('..', __dir__))

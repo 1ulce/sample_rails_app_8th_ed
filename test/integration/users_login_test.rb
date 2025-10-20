@@ -82,11 +82,19 @@ end
 
 class RememberingTest < UsersLogin
 
+  # @t:id "TEST-users-login-remember-cookie"
+  # @t:covers ["app/models/user.rb#remember","app/models/user.rb#session_token","app/models/user.rb#authenticated?"]
+  # @t:intent "Remember-me option persists cookie token"
+  # @t:kind "integration"
   test "login with remembering" do
     log_in_as(@user, remember_me: '1')
     assert_not cookies[:remember_token].blank?
   end
 
+  # @t:id "TEST-users-login-forget-cookie"
+  # @t:covers ["app/models/user.rb#forget","app/models/user.rb#remember"]
+  # @t:intent "Disable remember-me clears cookie token"
+  # @t:kind "integration"
   test "login without remembering" do
     # Log in to set the cookie.
     log_in_as(@user, remember_me: '1')
