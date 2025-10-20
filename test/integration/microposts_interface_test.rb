@@ -6,6 +6,10 @@ class MicropostsInterfaceTest < ActionDispatch::IntegrationTest
     @user = users(:michael)
   end
 
+  # @t:id "TEST-microposts-interface-crud"
+  # @t:covers ["app/controllers/microposts_controller.rb#create","app/controllers/microposts_controller.rb#destroy","app/controllers/microposts_controller.rb#micropost_params","app/controllers/microposts_controller.rb#correct_user","app/models/micropost.rb#Micropost"]
+  # @t:intent "Full micropost UI workflow covering invalid submissions, creation, deletion, and authorization"
+  # @t:kind "integration"
   test "micropost interface" do
     log_in_as(@user)
     get root_path
